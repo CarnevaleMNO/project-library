@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project: Library</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://kit.fontawesome.com/d77201538f.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <p class="title">Project: Library</p>
+        <div class="new-book">
+            <button data-modal-target="#modal" class="plus"><i class="fas fa-plus"></i></button>
+            <p>New Book</p>
+        </div>
+        
+    </header>
+    <main>
+        <h1>Welcome to Your Library</h1>
+
+        <div class="modal" id="modal">
+            <div class="modal-header">
+                <div class="modal-title">Add A New Book</div>
+                <button data-close-button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="book-form" class="modal-form" action="">
+                    <label for="title">Title:</label>
+                    <input type="text" class="title" id="title">
+                    <label for="author">Author:</label>
+                    <input type="text" class="author" id="author">
+                    <label for="pages">Page Count:</label>
+                    <input type="text" class="pages" id="pages">
+                    <label style="align-self: flex-start;" for="genre">Genre:</label>
+                    <input type="text" class="genre" id="genre">
+                    <label for="read">Have you read the book?</label>
+                    <select class="sel read" id="read">
+                        <option class="yes" value="Reading">Reading</option>
+                        <option class="no" value="Read">Read</option>
+                    </select>
+                    
+                    <button class="modal-button" type="submit">Add Book</button>
+                </form>
+                
+            </div>
+        </div>
+        <div class="" id="overlay"></div>
+
+        <div class="library">
+    
+        </div>
+    </main>
+    <footer>
+
+    </footer>
+
+
+
+
+
+
+
+
+
+    <script src="./app.js"></script>
+</body>
+</html>
