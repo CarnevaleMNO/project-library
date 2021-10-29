@@ -8,6 +8,14 @@ const yesBtn = document.querySelector(".yes");
 const noBtn = document.querySelector(".no");
 const modalBtn = document.querySelector(".modal-button");
 const overlay = document.querySelector("#overlay");
+const storageInput = localStorage.getItem("myLibrary");
+
+//myLibrary.findIndex(x => x.title === 'x');
+//Library
+let myLibrary = JSON.parse(storageInput);
+if (myLibrary === null) {
+  myLibrary = [];
+}
 
 //Form
 const form = document.querySelector("#book-form");
@@ -40,7 +48,6 @@ modalBtn.addEventListener("click", function () {
                       <button class="book"><i class="fas fa-book-open"></i></button>
                       </div>
                       <div class="trash"><button class="trash-btn"><i class="fas fa-trash"></i></button></div>`;
-
     card.classList.add("card");
   } else {
     card.innerHTML = `<h2>${book.title}</h2>
@@ -48,8 +55,8 @@ modalBtn.addEventListener("click", function () {
                       <p>Pgs. <strong>${book.pages}</strong></p>
                       <p>Genre: <strong>${book.genre}</strong></p>
                       <div class="read-or-not">
-                      <p">${book.read}</p>
-                      <button class="book"><i class="fas fa-book-closed"></i></button>
+                      <p>${book.read}</p>
+                      <button class="book"><i class="fas fa-book"></i></button>
                       </div>
                       <div class="trash"><button class="trash-btn"><i class="fas fa-trash"></i></button></div>`;
     card.classList.add("card");
@@ -62,7 +69,9 @@ modalBtn.addEventListener("click", function () {
   //Library Functions
   let readOrNot = card.children[4];
   let btn = readOrNot.children[1];
-  btn.addEventListener('click', function(){
+  let thisBook = myLibrary.indexOf(book);
+  console.log(btn)
+  btn.addEventListener("click", function () {
     let card = this.parentNode.parentNode;
     let p = this.parentNode;
     let pCard = p.children[0];
@@ -75,16 +84,21 @@ modalBtn.addEventListener("click", function () {
       btn.innerHTML = '<i class="fas fa-book-open"></i>';
       card.classList.remove("card-read");
     }
-  })
+    myLibrary[thisBook].read = p.children[0].innerText;
+    localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
+  });
+
   let trash = card.children[5];
   let trashBtn = trash.children[0];
-  trashBtn.addEventListener('click', function(){
-    let card = this.parentNode.parentNode
+  trashBtn.addEventListener("click", function () {
+    let card = this.parentNode.parentNode;
     let h2 = card.children[0];
-    myLibrary.splice(h2, 1)
-    let parent = card.parentNode
-    parent.removeChild(card)
-  })
+    let found = myLibrary.findIndex((o) => o.title === h2.innerText);
+    myLibrary.splice(found, 1);
+    localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
+    let parent = card.parentNode;
+    parent.removeChild(card);
+  });
 });
 
 //Modals
@@ -99,11 +113,8 @@ closeModalBtn.addEventListener("click", function () {
   overlay.classList.remove("active");
 });
 
-// myLibrary.findIndex(x => x.title === 'x');
-//Library
-let myLibrary = [];
 function Book(title, author, pages, genre, read) {
-    (this.title = title),
+  (this.title = title),
     (this.author = author),
     (this.pages = pages),
     (this.genre = genre),
@@ -111,25 +122,8 @@ function Book(title, author, pages, genre, read) {
 }
 function addBookToLibrary(book) {
   myLibrary.push(book);
+  localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
 }
-
-//Seeds / Examples
-const book1 = new Book(
-  "The First Law",
-  "Joe Abercrombie",
-  "560",
-  "Fantasy",
-  "Read"
-);
-const book2 = new Book(
-  "Gardens of the Moon",
-  "Steven Erikson",
-  "712",
-  "Fantasy",
-  "Reading"
-);
-addBookToLibrary(book1);
-addBookToLibrary(book2);
 
 //Cards
 for (let book of myLibrary) {
@@ -168,6 +162,8 @@ for (let button of buttons) {
     let card = this.parentNode.parentNode;
     let p = this.parentNode;
     let pCard = p.children[0];
+    let h2 = card.children[0];
+    let found = myLibrary.findIndex((o) => o.title === h2.innerText);
     if (pCard.innerHTML === "Reading") {
       p.children[0].innerHTML = "Read";
       button.innerHTML = '<i class="fas fa-book"></i>';
@@ -177,16 +173,23 @@ for (let button of buttons) {
       button.innerHTML = '<i class="fas fa-book-open"></i>';
       card.classList.remove("card-read");
     }
+    myLibrary[found].read = p.children[0].innerHTML
+    localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
   });
 }
 
-const trashButtons = document.querySelectorAll('.trash-btn');
-for(let trashButton of trashButtons){
-    trashButton.addEventListener('click', function(){
-        let card = this.parentNode.parentNode
-        let h2 = card.children[0];
-        myLibrary.splice(h2, 1)
-        let parent = card.parentNode
-        parent.removeChild(card)
-    })
+//Trash Buttons
+const trashButtons = document.querySelectorAll(".trash-btn");
+for (let trashButton of trashButtons) {
+  trashButton.addEventListener("click", function () {
+    let card = this.parentNode.parentNode;
+    let h2 = card.children[0];
+    let found = myLibrary.findIndex((o) => o.title === h2.innerText);
+    console.log(found);
+    myLibrary.splice(found, 1);
+    localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
+    let parent = card.parentNode;
+    parent.removeChild(card);
+  });
 }
+
